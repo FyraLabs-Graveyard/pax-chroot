@@ -27,25 +27,43 @@ func main() {
 		panic(err)
 	}
 
+	println("Installing pax in chroot...")
 	if err := util.Install(name, "pax", "2.0.3", false); err != nil {
 		panic(err)
 	}
+
+	println("Installing apkg in chroot...")
 	if err := util.Install(name, "apkg", "2.0.11", false); err != nil {
 		panic(err)
 	}
+
+	println("Installing gcc in chroot...")
 	if err := util.Install(name, "gcc", "11.2.0", false); err != nil {
 		panic(err)
 	}
+
+	println("Installing glibc in chroot...")
 	if err := util.Install(name, "glibc", "2.34.0", false); err != nil {
 		panic(err)
 	}
+
+	println("Installing bash in chroot...")
 	if err := util.Install(name, "bash", "5.1.8", false); err != nil {
 		panic(err)
 	}
+
+	println("Installing ncurses in chroot...")
 	if err := util.Install(name, "ncurses", "6.2.0", false); err != nil {
 		panic(err)
 	}
+
+	println("Installing readline in chroot...")
 	if err := util.Install(name, "readline", "8.1.0", false); err != nil {
+		panic(err)
+	}
+
+	println("Installing coreutils in chroot...")
+	if err := util.Install(name, "coreutils", "9.0", false); err != nil {
 		panic(err)
 	}
 
