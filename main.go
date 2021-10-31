@@ -35,6 +35,18 @@ func main() {
 				Usage: "The config file to use when creating a chroot",
 				Aliases: []string{"f"},
 			},
+			&cli.BoolFlag{
+				Name: "mount-root",
+				Value: false,
+				Usage: "Mount the host's root to /mnt in the chroot",
+				Aliases: []string{"r"},
+			},
+			&cli.BoolFlag{
+				Name: "use-current-dir",
+				Value: false,
+				Usage: "Change the working directory in the chroot to the current dir, must be combined with --mount-root",
+				Aliases: []string{"u"},
+			},
 		},
 		Action: mainCommand,
 	}
@@ -53,6 +65,12 @@ func mainCommand(c *cli.Context) error {
 
 	if err := SetupChroot(name); err != nil {
 		return err
+	}
+
+	if c.Bool("mount-root") {
+		if err := BindMount(name, "/mnt", "/"); err != nil {
+			return nil
+		}
 	}
 
 	err = Cp(filepath.Join(os.Getenv("HOME"), "/.apkg/paxsources.list"), filepath.Join(name, "paxsources.list"))
@@ -85,9 +103,21 @@ func mainCommand(c *cli.Context) error {
 		}
 	}
 
+	curr, err := os.Getwd()
+
+	if err != nil {
+		return nil
+	}
+
 	exit, err := OpenChroot(name)
 	if err != nil {
 		return err
+	}
+
+	if c.Bool("use-current-dir") {
+		if err := os.Chdir(filepath.Join("/mnt", curr)); err != nil {
+			return err
+		}
 	}
 
 	cmd := exec.Command(c.String("command"))
@@ -102,6 +132,12 @@ func mainCommand(c *cli.Context) error {
 
 	if err := CleanupChroot(name); err != nil {
 		return err
+	}
+
+	if c.Bool("mount-root") {
+		if err := UnmountBind(name, "/mnt"); err != nil {
+			return nil
+		}
 	}
 
 	return err
@@ -198,6 +234,27 @@ func CleanupChroot(name string) error {
 
 	devdir := filepath.Join(name, "dev")
 	if err := unix.Unmount(devdir, 0); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func BindMount(root string, from string, to string) error {
+	dir := filepath.Join(root, from)
+	if err := os.Mkdir(dir, 0777); err != nil {
+		return err
+	}
+	if err := unix.Mount(to, dir, "none", unix.MS_BIND, ""); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func UnmountBind(root string, from string) error {
+	dir := filepath.Join(root, from)
+	if err := unix.Unmount(dir, 0); err != nil {
 		return err
 	}
 
