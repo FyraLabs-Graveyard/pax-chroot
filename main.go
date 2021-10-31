@@ -82,9 +82,9 @@ func main() {
 		panic(err)
 	}
 
-	// if err := CleanupChroot(name); err != nil {
-	// 	panic(err)
-	// }
+	if err := CleanupChroot(name); err != nil {
+		panic(err)
+	}
 }
 
 func cp(from string, to string) error {
