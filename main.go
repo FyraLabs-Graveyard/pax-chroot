@@ -1,8 +1,10 @@
 package main
 
 import (
+	"io"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"syscall"
 
@@ -20,12 +22,44 @@ func main() {
 		panic(err)
 	}
 
+	// err = cp(filepath.Join(os.Getenv("HOME"), "/.apkg/paxsources.list"), filepath.Join(name, "paxsources.list"))
+	err = cp("/home/m/.apkg/paxsources.list", filepath.Join(name, "paxsources.list"))
+	if err != nil {
+		panic(err)
+	}
+
+	if err := util.Install(name, "pax", "2.0.3", false); err != nil {
+		panic(err)
+	}
+	if err := util.Install(name, "apkg", "2.0.11", false); err != nil {
+		panic(err)
+	}
+	if err := util.Install(name, "gcc", "11.2.0", false); err != nil {
+		panic(err)
+	}
+	if err := util.Install(name, "glibc", "2.34.0", false); err != nil {
+		panic(err)
+	}
+	if err := util.Install(name, "bash", "5.1.8", false); err != nil {
+		panic(err)
+	}
+	if err := util.Install(name, "ncurses", "6.2.0", false); err != nil {
+		panic(err)
+	}
+	if err := util.Install(name, "readline", "8.1.0", false); err != nil {
+		panic(err)
+	}
+
 	exit, err := OpenChroot(name)
 	if err != nil {
 		panic(err)
 	}
 
-	util.Install(name, "linux", "5.13", true)
+	bash := exec.Command("bash")
+	bash.Stdout = os.Stdout
+	bash.Stdin = os.Stdin
+	bash.Stderr = os.Stderr
+	_ = bash.Run()
 
 	if err := exit(); err != nil {
 		panic(err)
@@ -34,6 +68,29 @@ func main() {
 	// if err := CleanupChroot(name); err != nil {
 	// 	panic(err)
 	// }
+}
+
+func cp(from string, to string) error {
+	fromFile, err := os.Open(from)
+	if err != nil {
+		return err
+	}
+
+	toFile, err := os.Create(to)
+	if err != nil {
+		return err
+	}
+	defer toFile.Close()
+
+	if _, err = io.Copy(toFile, fromFile); err != nil {
+		return err
+	}
+
+	if err = toFile.Sync(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func OpenChroot(name string) (func() error, error) {
