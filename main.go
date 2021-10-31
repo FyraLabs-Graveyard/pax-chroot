@@ -1,18 +1,16 @@
 package main
 
 import (
-	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"syscall"
 
 	"github.com/charmbracelet/lipgloss"
-	"github.com/innatical/pax/v2/util"
+	"github.com/innatical/pax-chroot/util"
+	pax "github.com/innatical/pax/v2/util"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/sys/unix"
 )
 
 var errorStyle = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#FF0000"))
@@ -63,17 +61,17 @@ func mainCommand(c *cli.Context) error {
 		return err
 	}
 
-	if err := SetupChroot(name); err != nil {
+	if err := util.SetupChroot(name); err != nil {
 		return err
 	}
 
 	if c.Bool("mount-root") {
-		if err := BindMount(name, "/mnt", "/"); err != nil {
+		if err := util.BindMount(name, "/mnt", "/"); err != nil {
 			return nil
 		}
 	}
 
-	err = Cp(filepath.Join(os.Getenv("HOME"), "/.apkg/paxsources.list"), filepath.Join(name, "paxsources.list"))
+	err = util.Cp(filepath.Join(os.Getenv("HOME"), "/.apkg/paxsources.list"), filepath.Join(name, "paxsources.list"))
 	if err != nil {
 		return err
 	}
@@ -93,11 +91,11 @@ func mainCommand(c *cli.Context) error {
 		
 		println("Installing " + parsed[0] + " in chroot...")
 		if len(parsed) == 1 {
-			if err := util.Install(name, parsed[0], "", true); err != nil {
+			if err := pax.Install(name, parsed[0], "", true); err != nil {
 				return nil
 			}
 		} else {
-			if err := util.Install(name, parsed[0], parsed[1], true); err != nil {
+			if err := pax.Install(name, parsed[0], parsed[1], true); err != nil {
 				return nil
 			}
 		}
@@ -109,7 +107,7 @@ func mainCommand(c *cli.Context) error {
 		return nil
 	}
 
-	exit, err := OpenChroot(name)
+	exit, err := util.OpenChroot(name)
 	if err != nil {
 		return err
 	}
@@ -130,133 +128,15 @@ func mainCommand(c *cli.Context) error {
 		return err
 	}
 
-	if err := CleanupChroot(name); err != nil {
+	if err := util.CleanupChroot(name); err != nil {
 		return err
 	}
 
 	if c.Bool("mount-root") {
-		if err := UnmountBind(name, "/mnt"); err != nil {
+		if err := util.UnmountBind(name, "/mnt"); err != nil {
 			return nil
 		}
 	}
 
 	return err
-}
-
-func Cp(from string, to string) error {
-	fromFile, err := os.Open(from)
-	if err != nil {
-		return err
-	}
-
-	toFile, err := os.Create(to)
-	if err != nil {
-		return err
-	}
-	defer toFile.Close()
-
-	if _, err = io.Copy(toFile, fromFile); err != nil {
-		return err
-	}
-
-	if err = toFile.Sync(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func OpenChroot(name string) (func() error, error) {
-	root, err := os.Open("/")
-	if err != nil {
-		return nil, err
-	}
-
-	if err := os.Chdir(name); err != nil {
-		return nil, err
-	}
-
-	if err := syscall.Chroot(name); err != nil {
-		root.Close()
-		return nil, err
-	}
-
-	exit := func() error {
-		defer root.Close()
-		if err := root.Chdir(); err != nil {
-			return err
-		}
-		return syscall.Chroot(".")
-	}
-
-	return exit, nil
-
-}
-
-func SetupChroot(name string) error {
-	procdir := filepath.Join(name, "proc")
-	if err := os.Mkdir(procdir, 0777); err != nil {
-		return err
-	}
-	if err := unix.Mount("/proc", procdir, "proc", 0, "rw"); err != nil {
-		return err
-	}
-
-	sysdir := filepath.Join(name, "sys")
-	if err := os.Mkdir(sysdir, 0777); err != nil {
-		return err
-	}
-	if err := unix.Mount("/sys", sysdir, "sysfs", 0, "rw"); err != nil {
-		return err
-	}
-
-	devdir := filepath.Join(name, "dev")
-	if err := os.Mkdir(devdir, 0777); err != nil {
-		return err
-	}
-	if err := unix.Mount("/dev", devdir, "none", unix.MS_BIND, ""); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func CleanupChroot(name string) error {
-	procdir := filepath.Join(name, "proc")
-	if err := unix.Unmount(procdir, 0); err != nil {
-		return err
-	}
-
-	sysdir := filepath.Join(name, "sys")
-	if err := unix.Unmount(sysdir, 0); err != nil {
-		return err
-	}
-
-	devdir := filepath.Join(name, "dev")
-	if err := unix.Unmount(devdir, 0); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func BindMount(root string, from string, to string) error {
-	dir := filepath.Join(root, from)
-	if err := os.Mkdir(dir, 0777); err != nil {
-		return err
-	}
-	if err := unix.Mount(to, dir, "none", unix.MS_BIND, ""); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func UnmountBind(root string, from string) error {
-	dir := filepath.Join(root, from)
-	if err := unix.Unmount(dir, 0); err != nil {
-		return err
-	}
-
-	return nil
 }
