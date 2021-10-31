@@ -6,93 +6,108 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"syscall"
 
+	"github.com/charmbracelet/lipgloss"
 	"github.com/innatical/pax/v2/util"
+	"github.com/urfave/cli/v2"
 	"golang.org/x/sys/unix"
 )
 
+var errorStyle = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#FF0000"))
+
 func main() {
+	app := &cli.App {
+		Name:      "pax-chroot",
+		Usage:     "Pax Chroot Utility",
+		UsageText: "pax-chroot [options]",
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:  "command",
+				Value: "bash",
+				Usage: "The command to run after entering the chroot",
+				Aliases: []string{"c"},
+			},
+			&cli.PathFlag{
+				Name: "config",
+				Value: "PAXCHROOT",
+				Usage: "The config file to use when creating a chroot",
+				Aliases: []string{"f"},
+			},
+		},
+		Action: mainCommand,
+	}
+
+	if err := app.Run(os.Args); err != nil {
+		println(errorStyle.Render("Error: ") + err.Error())
+		os.Exit(1)
+	}
+}
+
+func mainCommand(c *cli.Context) error {
 	name, err := ioutil.TempDir("/tmp", "pax-chroot")
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	if err := SetupChroot(name); err != nil {
-		panic(err)
+		return err
 	}
 
-	err = cp(filepath.Join(os.Getenv("HOME"), "/.apkg/paxsources.list"), filepath.Join(name, "paxsources.list"))
+	err = Cp(filepath.Join(os.Getenv("HOME"), "/.apkg/paxsources.list"), filepath.Join(name, "paxsources.list"))
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	println("Installing pax in chroot...")
-	if err := util.Install(name, "pax", "2.0.3", false); err != nil {
-		panic(err)
+	configFile := c.Path("config")
+	config, err := ioutil.ReadFile(configFile)
+	if err != nil {
+		return err
 	}
 
-	println("Installing apkg in chroot...")
-	if err := util.Install(name, "apkg", "2.0.11", false); err != nil {
-		panic(err)
-	}
+	for _, pkg := range strings.Split(string(config), "\n") {
+		parsed := strings.Split(pkg, "@")
 
-	println("Installing gcc in chroot...")
-	if err := util.Install(name, "gcc", "11.2.0", false); err != nil {
-		panic(err)
-	}
-
-	println("Installing glibc in chroot...")
-	if err := util.Install(name, "glibc", "2.34.0", false); err != nil {
-		panic(err)
-	}
-
-	println("Installing bash in chroot...")
-	if err := util.Install(name, "bash", "5.1.8", false); err != nil {
-		panic(err)
-	}
-
-	println("Installing ncurses in chroot...")
-	if err := util.Install(name, "ncurses", "6.2.0", false); err != nil {
-		panic(err)
-	}
-
-	println("Installing readline in chroot...")
-	if err := util.Install(name, "readline", "8.1.0", false); err != nil {
-		panic(err)
-	}
-
-	println("Installing coreutils in chroot...")
-	if err := util.Install(name, "coreutils", "9.0", false); err != nil {
-		panic(err)
-	}
-
-	println("Installing libcap in chroot...")
-	if err := util.Install(name, "libcap", "2.53", false); err != nil {
-		panic(err)
+		if pkg == "" {
+			continue
+		}
+		
+		println("Installing " + parsed[0] + " in chroot...")
+		if len(parsed) == 1 {
+			if err := util.Install(name, parsed[0], "", true); err != nil {
+				return nil
+			}
+		} else {
+			if err := util.Install(name, parsed[0], parsed[1], true); err != nil {
+				return nil
+			}
+		}
 	}
 
 	exit, err := OpenChroot(name)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	bash := exec.Command("bash")
-	bash.Stdout = os.Stdout
-	bash.Stdin = os.Stdin
-	bash.Stderr = os.Stderr
-	_ = bash.Run()
+	cmd := exec.Command(c.String("command"))
+	cmd.Stdout = os.Stdout
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	_ = cmd.Run()
 
 	if err := exit(); err != nil {
-		panic(err)
+		return err
 	}
 
 	if err := CleanupChroot(name); err != nil {
-		panic(err)
+		return err
 	}
+
+	return err
 }
 
-func cp(from string, to string) error {
+func Cp(from string, to string) error {
 	fromFile, err := os.Open(from)
 	if err != nil {
 		return err
