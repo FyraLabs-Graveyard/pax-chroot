@@ -22,8 +22,7 @@ func main() {
 		panic(err)
 	}
 
-	// err = cp(filepath.Join(os.Getenv("HOME"), "/.apkg/paxsources.list"), filepath.Join(name, "paxsources.list"))
-	err = cp("/home/m/.apkg/paxsources.list", filepath.Join(name, "paxsources.list"))
+	err = cp(filepath.Join(os.Getenv("HOME"), "/.apkg/paxsources.list"), filepath.Join(name, "paxsources.list"))
 	if err != nil {
 		panic(err)
 	}
