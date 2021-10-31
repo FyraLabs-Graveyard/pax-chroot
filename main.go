@@ -67,6 +67,11 @@ func main() {
 		panic(err)
 	}
 
+	println("Installing libcap in chroot...")
+	if err := util.Install(name, "libcap", "2.53", false); err != nil {
+		panic(err)
+	}
+
 	exit, err := OpenChroot(name)
 	if err != nil {
 		panic(err)
