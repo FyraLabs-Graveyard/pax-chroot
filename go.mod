@@ -24,11 +24,5 @@ require (
 require (
 	github.com/charmbracelet/lipgloss v0.4.0
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
-	github.com/innatical/pax v1.0.4
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-)
-
-require (
-	github.com/innatical/apkg v0.0.0-20210830182343-969507c90e82 // indirect
-	github.com/ulikunitz/xz v0.5.10 // indirect
 )
