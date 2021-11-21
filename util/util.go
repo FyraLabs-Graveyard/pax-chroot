@@ -85,6 +85,9 @@ func SetupChroot(name string) error {
 	}
 
 	resolv := filepath.Join(name, "etc/resolv.conf")
+	if err := os.Mkdir(filepath.Join(name, "etc"), 0777); err != nil {
+		return err
+	}
 	if err := unix.Mount("/etc/resolv.conf", resolv, "none", unix.MS_BIND, ""); err != nil {
 		return err
 	}
@@ -105,6 +108,11 @@ func CleanupChroot(name string) error {
 
 	devdir := filepath.Join(name, "dev")
 	if err := unix.Unmount(devdir, 0); err != nil {
+		return err
+	}
+
+	resolv := filepath.Join(name, "etc/resolv.conf")
+	if err := unix.Unmount(resolv, 0); err != nil {
 		return err
 	}
 
