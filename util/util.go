@@ -84,6 +84,11 @@ func SetupChroot(name string) error {
 		return err
 	}
 
+	resolv := filepath.Join(name, "etc/resolv.conf")
+	if err := unix.Mount("/etc/resolv.conf", resolv, "none", unix.MS_BIND, ""); err != nil {
+		return err
+	}
+
 	return nil
 }
 
