@@ -82,24 +82,7 @@ func mainCommand(c *cli.Context) error {
 		return err
 	}
 
-	for _, pkg := range strings.Split(string(config), "\n") {
-		parsed := strings.Split(pkg, "@")
-
-		if pkg == "" {
-			continue
-		}
-
-		println("Installing " + parsed[0] + " in chroot...")
-		if len(parsed) == 1 {
-			if err := pax.Install(name, parsed[0], "", true); err != nil {
-				return err
-			}
-		} else {
-			if err := pax.Install(name, parsed[0], parsed[1], true); err != nil {
-				return err
-			}
-		}
-	}
+	pax.InstallMultiple(name, strings.Split(string(config), "\n"), true)
 
 	curr, err := os.Getwd()
 
