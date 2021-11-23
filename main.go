@@ -71,7 +71,7 @@ func mainCommand(c *cli.Context) error {
 		}
 	}
 
-	err = util.Cp(filepath.Join(os.Getenv("HOME"), "/.apkg/paxsources.list"), filepath.Join(name, "paxsources.list"))
+	err = util.Cp(filepath.Join(os.Getenv("HOME"), "/.apkg/repos.toml"), filepath.Join(name, "repo.toml"))
 	if err != nil {
 		return err
 	}
