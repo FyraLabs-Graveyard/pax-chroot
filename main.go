@@ -82,7 +82,9 @@ func mainCommand(c *cli.Context) error {
 		return err
 	}
 
-	pax.InstallMultiple(name, strings.Split(string(config), "\n"), true)
+	if err := pax.InstallMultiple(name, strings.Split(string(config), "\n"), true); err != nil {
+		return err
+	}
 
 	curr, err := os.Getwd()
 
