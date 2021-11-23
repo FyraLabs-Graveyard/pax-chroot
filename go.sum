@@ -21,12 +21,16 @@ github.com/innatical/apkg/v2 v2.0.13 h1:mIDLWAWkfm2vev21hmWy1GDg9McvCDMqe9rjLDmC
 github.com/innatical/apkg/v2 v2.0.13/go.mod h1:+EBhdSMt95PkfN99I+9XzgcsP4XvJOpAfrOIuaB0KNo=
 github.com/innatical/apkg/v2 v2.0.15 h1:nP8ZZtw0AoT7wu5w5mYLmitL+oJ/eWxRKVhAuozIOMU=
 github.com/innatical/apkg/v2 v2.0.15/go.mod h1:HmuiplhmrBJ8ifllJG5tpGbduiPIbxdi1dHXXQxtlM0=
+github.com/innatical/apkg/v2 v2.0.16 h1:3/MGRDLcjqcYqRvPmnzh0itqwhhRgdin2d31/Vub9Aw=
+github.com/innatical/apkg/v2 v2.0.16/go.mod h1:paRA8M+CKHqarnfmO2TltZ329CxwcIoCm342auqV8TY=
 github.com/innatical/pax/v2 v2.0.7 h1:SpufZDg4K6Rjxn+VnYo/urIBHQIU6EKhObamcEASOYY=
 github.com/innatical/pax/v2 v2.0.7/go.mod h1:h7cgDIOXB1twNQaaEOoJKhcUbqUDrJAOq+r8YCXO4/4=
 github.com/innatical/pax/v2 v2.0.8 h1:9unmY47TWsg9dCYXu5BxHj5nMMJeEfsLFtr8KjEJKTc=
 github.com/innatical/pax/v2 v2.0.8/go.mod h1:zld2YJiMrC+GPOQ5sDORC+DdE0qs7kilLxwUXt1yHcs=
 github.com/innatical/pax/v2 v2.0.9 h1:0+C5/maBC1Rh3fgOeO7ERZODfcroG/op2fhcPATTU7A=
 github.com/innatical/pax/v2 v2.0.9/go.mod h1:V+5W/jbTj0H+uKMXk4/vhzOeg3SCROlk463bNfhqVkM=
+github.com/innatical/pax/v2 v2.0.10 h1:9r8QVc4WbJosQoJgWfaSxT1ArDHH4iJh+HVuU4ZCGYc=
+github.com/innatical/pax/v2 v2.0.10/go.mod h1:V+5W/jbTj0H+uKMXk4/vhzOeg3SCROlk463bNfhqVkM=
 github.com/klauspost/compress v1.13.6 h1:P76CopJELS0TiO2mebmnzgWaajssP/EszplttgQxcgc=
 github.com/klauspost/compress v1.13.6/go.mod h1:/3/Vjq9QcHkK5uEr5lBEmyoZ1iFhe47etQ6QUkpK6sk=
 github.com/lucasb-eyer/go-colorful v1.2.0 h1:1nnpGOrhyZZuNyfu1QjKiUICQ74+3FNCN69Aj6K7nkY=
