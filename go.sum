@@ -25,6 +25,8 @@ github.com/innatical/pax/v2 v2.0.7 h1:SpufZDg4K6Rjxn+VnYo/urIBHQIU6EKhObamcEASOY
 github.com/innatical/pax/v2 v2.0.7/go.mod h1:h7cgDIOXB1twNQaaEOoJKhcUbqUDrJAOq+r8YCXO4/4=
 github.com/innatical/pax/v2 v2.0.8 h1:9unmY47TWsg9dCYXu5BxHj5nMMJeEfsLFtr8KjEJKTc=
 github.com/innatical/pax/v2 v2.0.8/go.mod h1:zld2YJiMrC+GPOQ5sDORC+DdE0qs7kilLxwUXt1yHcs=
+github.com/innatical/pax/v2 v2.0.9 h1:0+C5/maBC1Rh3fgOeO7ERZODfcroG/op2fhcPATTU7A=
+github.com/innatical/pax/v2 v2.0.9/go.mod h1:V+5W/jbTj0H+uKMXk4/vhzOeg3SCROlk463bNfhqVkM=
 github.com/klauspost/compress v1.13.6 h1:P76CopJELS0TiO2mebmnzgWaajssP/EszplttgQxcgc=
 github.com/klauspost/compress v1.13.6/go.mod h1:/3/Vjq9QcHkK5uEr5lBEmyoZ1iFhe47etQ6QUkpK6sk=
 github.com/lucasb-eyer/go-colorful v1.2.0 h1:1nnpGOrhyZZuNyfu1QjKiUICQ74+3FNCN69Aj6K7nkY=
@@ -51,6 +53,8 @@ github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQD
 github.com/shurcooL/sanitized_anchor_name v1.0.0/go.mod h1:1NzhyTcUVG4SuEtjjoZeVRXNmyL/1OwPU0+IJeTBvfc=
 github.com/urfave/cli/v2 v2.3.0 h1:qph92Y649prgesehzOrQjdWyxFOp/QVM+6imKHad91M=
 github.com/urfave/cli/v2 v2.3.0/go.mod h1:LJmUH05zAU44vOAcrfzZQKsZbVcdbOG8rtL3/XcUArI=
+golang.org/x/sync v0.0.0-20210220032951-036812b2e83c h1:5KslGYwFpkhGh+Q16bwMP3cOontH8FOep7tGV86Y7SQ=
+golang.org/x/sync v0.0.0-20210220032951-036812b2e83c/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sys v0.0.0-20200116001909-b77594299b42/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210119212857-b64e53b001e4/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
