@@ -25,6 +25,8 @@ github.com/innatical/apkg/v2 v2.0.16 h1:3/MGRDLcjqcYqRvPmnzh0itqwhhRgdin2d31/Vub
 github.com/innatical/apkg/v2 v2.0.16/go.mod h1:paRA8M+CKHqarnfmO2TltZ329CxwcIoCm342auqV8TY=
 github.com/innatical/apkg/v2 v2.0.17 h1:uav7SxyonrpgEu/v5S8TD1TDdrWdpSniPPguDqYhDek=
 github.com/innatical/apkg/v2 v2.0.17/go.mod h1:paRA8M+CKHqarnfmO2TltZ329CxwcIoCm342auqV8TY=
+github.com/innatical/apkg/v2 v2.0.18 h1:KsyHmF2TimABU+CncRc+Uwtf/dKkjSdapE7DzRM16jo=
+github.com/innatical/apkg/v2 v2.0.18/go.mod h1:paRA8M+CKHqarnfmO2TltZ329CxwcIoCm342auqV8TY=
 github.com/innatical/pax/v2 v2.0.7 h1:SpufZDg4K6Rjxn+VnYo/urIBHQIU6EKhObamcEASOYY=
 github.com/innatical/pax/v2 v2.0.7/go.mod h1:h7cgDIOXB1twNQaaEOoJKhcUbqUDrJAOq+r8YCXO4/4=
 github.com/innatical/pax/v2 v2.0.8 h1:9unmY47TWsg9dCYXu5BxHj5nMMJeEfsLFtr8KjEJKTc=
