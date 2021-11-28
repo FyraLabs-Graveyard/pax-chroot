@@ -3,11 +3,12 @@ module github.com/innatical/pax-chroot
 go 1.17
 
 require (
-	github.com/innatical/pax/v2 v2.0.12
+	github.com/innatical/pax/v3 v3.0.1
 	golang.org/x/sys v0.0.0-20211124211545-fe61309f8881
 )
 
 require (
+	github.com/cheggaaa/pb v1.0.29 // indirect
 	github.com/goombaio/dag v0.0.0-20181006234417-a8874b1f72ff // indirect
 	github.com/goombaio/orderedmap v0.0.0-20180925151256-3da0e2f905f9 // indirect
 	github.com/goombaio/orderedset v0.0.0-20180925151225-8e67b20a9b77 // indirect

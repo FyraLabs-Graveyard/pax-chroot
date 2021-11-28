@@ -4,12 +4,13 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"os/user"
 	"path/filepath"
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/innatical/pax-chroot/util"
-	pax "github.com/innatical/pax/v2/util"
+	pax "github.com/innatical/pax/v3/util"
 	"github.com/urfave/cli/v2"
 )
 
@@ -82,7 +83,13 @@ func mainCommand(c *cli.Context) error {
 		return err
 	}
 
-	if err := pax.InstallMultiple(name, strings.Split(string(config), "\n"), true); err != nil {
+	usr, err := user.Current()
+	if err != nil {
+		println(err.Error())
+		os.Exit(1)
+	}
+
+	if err := pax.InstallMultiple(name, filepath.Join(usr.HomeDir, "/.apkg", "cache"), strings.Split(string(config), "\n"), true); err != nil {
 		return err
 	}
 
